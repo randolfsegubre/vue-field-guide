@@ -1,0 +1,23 @@
+@VueFieldGuide.Api_HostAddress = http://localhost:5125
+
+GET {{VueFieldGuide.Api_HostAddress}}/api/tasks
+Accept: application/json
+
+###
+
+POST {{VueFieldGuide.Api_HostAddress}}/api/tasks
+Content-Type: application/json
+
+{
+  "text": "A task added via the .http file"
+}
+
+###
+
+PATCH {{VueFieldGuide.Api_HostAddress}}/api/tasks/1/toggle
+
+###
+
+DELETE {{VueFieldGuide.Api_HostAddress}}/api/tasks/1
+
+###

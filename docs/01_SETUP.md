@@ -54,7 +54,7 @@ auto-generated.
 |---|---|
 | `index.html` | The one real Hypertext Markup Language (HTML) page the browser ever loads. It contains a single empty `<div id="app"></div>` and a `<script>` tag pointing at `src/main.ts` — everything else on screen is inserted into that div by Vue.js at runtime. This is what makes Vue.js a Single Page Application (SPA) framework: the browser never navigates to a second HTML page. |
 | `src/main.ts` | The entry point. Creates a Vue.js application instance from the root component (`App.vue`) and mounts it onto the `#app` div from `index.html`. Three lines, and it is the only place `createApp()` is called. |
-| `src/App.vue` | The root component — see [docs/03_ANATOMY.md](03_ANATOMY.md) for what it does in this specific app. |
+| `src/App.vue` | The root component — a thin shell (nav bar + `<router-view>`) once Vue Router was added by hand after scaffolding; see [docs/03_ANATOMY.md](03_ANATOMY.md). |
 | `package.json` | Lists dependencies (`vue` itself, plus build tooling) and defines the npm scripts (`dev`, `build`, `preview`) described below. |
 | `vite.config.ts` | Configuration for **Vite**, the build tool this project uses. Vite runs the local development server with instant Hot Module Replacement (changed files appear in the browser in milliseconds without a full page reload) and bundles the production build. |
 | `tsconfig*.json` | TypeScript compiler configuration — what syntax is allowed, how strict type-checking is, which files belong to which part of the build (application code vs. Node-only config files). |
@@ -81,7 +81,25 @@ npm run preview   # serves that dist/ build locally, so you can sanity-check
                    # the production build before deploying it
 ```
 
-## 5. Where to go next
+## 5. The API Demo page needs a second process
+
+The Task Board page (`/`) needs nothing beyond what's above. The **API
+Demo** page (`/api-demo`) additionally needs the ASP.NET Core Web API in
+[`server/VueFieldGuide.Api/`](../server/VueFieldGuide.Api/) running at the
+same time, in its own terminal:
+
+```bash
+cd server/VueFieldGuide.Api
+dotnet run
+```
+
+That project needs the .NET Software Development Kit (SDK) — this
+repository was built against .NET 10 — rather than Node.js/npm. See
+[docs/05_API_INTEGRATION.md](05_API_INTEGRATION.md) for everything specific
+to that half: Cross-Origin Resource Sharing (CORS), environment variables,
+and a full request trace.
+
+## 6. Where to go next
 
 With the project running, [docs/02_GUIDE.md](02_GUIDE.md) explains the
 vocabulary you'll see throughout `src/`, and

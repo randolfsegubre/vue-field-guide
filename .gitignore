@@ -37,3 +37,7 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# .NET (server/VueFieldGuide.Api build output)
+[Bb]in/
+[Oo]bj/

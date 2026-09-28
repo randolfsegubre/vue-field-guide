@@ -1,71 +1,44 @@
 <script setup lang="ts">
-// App.vue is the ROOT component — the one Vue mounts into <div id="app"> in
-// index.html (see src/main.ts). In the anatomy analogy used throughout
-// docs/03_ANATOMY.md, this file is the "torso": it is the only place that
-// calls useTasks(), so it is the only place that owns the task list. Every
-// child component below is "limbs" that receive data through props and
-// report actions back up through emitted events — they hold no task data
-// of their own.
-import { useTasks } from './composables/useTasks'
-import FilterTabs from './components/FilterTabs.vue'
-import TaskForm from './components/TaskForm.vue'
-import TaskStats from './components/TaskStats.vue'
-import TaskList from './components/TaskList.vue'
-
-// Calling the composable here (once) is what makes the state shared: every
-// destructured value below is the SAME reactive ref/computed instance, no
-// matter which child component ends up reading or triggering it.
-const { filteredTasks, stats, activeFilter, addTask, toggleTask, removeTask, setFilter } =
-  useTasks()
+// App.vue used to hold the task board directly; since Vue Router was added
+// it is now a thin SHELL shared by every page: a navigation bar plus
+// <RouterView />, which renders whichever view component matches the
+// current URL (see src/router/index.ts). The task board itself moved to
+// src/views/TaskBoardView.vue — see docs/03_ANATOMY.md for the updated
+// diagram of who owns what state after this change.
 </script>
 
 <template>
-  <main class="board">
-    <header class="board-header">
-      <h1>Vue Field Guide — Task Board</h1>
-      <p class="subtitle">
-        A tiny Vue 3 app built to be read, not just run. See
-        <code>docs/</code> in the repository root for the full walkthrough.
-      </p>
-    </header>
+  <div class="shell">
+    <nav class="nav">
+      <span class="brand">Vue Field Guide</span>
+      <!--
+        <router-link> renders a real <a> tag but intercepts the click to
+        update the URL and swap <router-view>'s content WITHOUT a full page
+        reload — that interception is what keeps this a Single Page
+        Application. `active-class` (Vue Router's default is `router-link-active`)
+        is applied automatically to whichever link matches the current route.
+      -->
+      <router-link to="/" class="nav-link">Task Board</router-link>
+      <router-link to="/about" class="nav-link">Tutorial</router-link>
+      <router-link to="/api-demo" class="nav-link">API Demo</router-link>
+    </nav>
 
-    <!--
-      TaskForm only needs to emit a string upward; it has no idea a `tasks`
-      array even exists. Vue convention: v-on:add is written @add.
-      `addTask` is the composable's function, imported above — TaskForm never
-      sees it, it only ever fires the `add` event and Vue routes it here.
-    -->
-    <TaskForm @add="addTask" />
-
-    <!--
-      TaskStats gets a plain object of numbers computed by useTasks(). It is a
-      pure "display" component: no emits section at all, because it never
-      needs to talk back up. That absence is itself meaningful — see
-      docs/03_ANATOMY.md's "read-only organs" section.
-    -->
-    <TaskStats :stats="stats" />
-
-    <!--
-      FilterTabs is handed the CURRENT filter (so it can highlight the active
-      tab) and emits `change` when the user clicks a different one. `setFilter`
-      is the composable function that actually updates `activeFilter`.
-    -->
-    <FilterTabs :active-filter="activeFilter" @change="setFilter" />
-
-    <!--
-      TaskList receives the already-filtered array (filteredTasks.value,
-      auto-unwrapped in the template) and forwards two events upward:
-      toggle and remove. Both ultimately call composable functions here.
-    -->
-    <TaskList :tasks="filteredTasks" @toggle="toggleTask" @remove="removeTask" />
-  </main>
+    <main class="content">
+      <!--
+        <router-view> is where the matched view component actually renders.
+        Swap the URL between /, /about, and /api-demo and only the content
+        inside this tag changes — the <nav> above never re-renders.
+      -->
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <style scoped>
-.board {
+.shell {
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 1.5rem 1.5rem 2rem;
   font-family:
     system-ui,
     -apple-system,
@@ -73,20 +46,36 @@ const { filteredTasks, stats, activeFilter, addTask, toggleTask, removeTask, set
     sans-serif;
 }
 
-.board-header h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.subtitle {
+.brand {
+  font-weight: 700;
+  color: #111827;
+  margin-right: 0.5rem;
+}
+
+.nav-link {
   color: #6b7280;
+  text-decoration: none;
   font-size: 0.9rem;
-  margin: 0 0 1.5rem;
+  padding: 0.25rem 0;
 }
 
-.subtitle code {
-  background: #f3f4f6;
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
+.nav-link:hover {
+  color: #111827;
+}
+
+/* Vue Router's default class for whichever link matches the current route. */
+.nav-link.router-link-active {
+  color: #111827;
+  font-weight: 600;
+  border-bottom: 2px solid #6366f1;
 }
 </style>

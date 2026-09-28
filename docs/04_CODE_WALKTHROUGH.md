@@ -48,13 +48,14 @@ of submitting an HTML `<form>`).
    binding from step 1 — instantly clears the visible input text too.
 
 4. `emit(...)` sends the string up to whichever parent used `<TaskForm>`.
-   That is `App.vue`, which wrote `@add="addTask"` —
-   [`App.vue:38`](../src/App.vue#L38). Vue.js calls `addTask` with exactly
-   the one argument `emit('add', ...)` was called with: the task text.
+   That is `TaskBoardView.vue`, which wrote `@add="addTask"` —
+   [`TaskBoardView.vue:30`](../src/views/TaskBoardView.vue#L30). Vue.js calls
+   `addTask` with exactly the one argument `emit('add', ...)` was called
+   with: the task text.
 
-5. `addTask` is not defined in `App.vue` — it is one of the functions
-   `useTasks()` returned, destructured at
-   [`App.vue:18`](../src/App.vue#L18). Its real definition is
+5. `addTask` is not defined in `TaskBoardView.vue` — it is one of the
+   functions `useTasks()` returned, destructured at
+   [`TaskBoardView.vue:15`](../src/views/TaskBoardView.vue#L15). Its real definition is
    [`useTasks.ts:74-78`](../src/composables/useTasks.ts#L74-L78):
    ```ts
    function addTask(text: string) {
@@ -82,9 +83,10 @@ of submitting an HTML `<form>`).
 
 8. Both are passed to child components as props: `filteredTasks` to
    `TaskList` via `:tasks="filteredTasks"` —
-   [`App.vue:60`](../src/App.vue#L60) — and `stats` to `TaskStats` via
-   `:stats="stats"` — [`App.vue:46`](../src/App.vue#L46). Vue.js re-renders
-   both children with the new prop values.
+   [`TaskBoardView.vue:33`](../src/views/TaskBoardView.vue#L33) — and `stats`
+   to `TaskStats` via `:stats="stats"` —
+   [`TaskBoardView.vue:31`](../src/views/TaskBoardView.vue#L31). Vue.js
+   re-renders both children with the new prop values.
 
 9. Inside `TaskList.vue`, `v-for="task in tasks"` —
    [`TaskList.vue:39`](../src/components/TaskList.vue#L39) — sees one more
@@ -143,9 +145,9 @@ recomputed `computed` values, two re-rendered child components. No manual
    this relay step is what "event forwarding" means (see
    [docs/03_ANATOMY.md](03_ANATOMY.md#tasklistvue--the-distributor)).
 
-4. `App.vue` wired `<TaskList ... @toggle="toggleTask" />` —
-   [`App.vue:60`](../src/App.vue#L60) — so `toggleTask` runs with that same
-   id, unchanged since step 2.
+4. `TaskBoardView.vue` wired `<TaskList ... @toggle="toggleTask" />` —
+   [`TaskBoardView.vue:33`](../src/views/TaskBoardView.vue#L33) — so
+   `toggleTask` runs with that same id, unchanged since step 2.
 
 5. `toggleTask` — [`useTasks.ts:85-88`](../src/composables/useTasks.ts#L85-L88):
    ```ts
@@ -189,8 +191,8 @@ recomputed `computed` values, two re-rendered child components. No manual
 2. `TaskList.vue` forwards it: `@remove="emit('remove', $event)"` —
    [`TaskList.vue:43`](../src/components/TaskList.vue#L43).
 
-3. `App.vue` wired `@remove="removeTask"` —
-   [`App.vue:60`](../src/App.vue#L60).
+3. `TaskBoardView.vue` wired `@remove="removeTask"` —
+   [`TaskBoardView.vue:33`](../src/views/TaskBoardView.vue#L33).
 
 4. `removeTask` — [`useTasks.ts:94-96`](../src/composables/useTasks.ts#L94-L96):
    ```ts
@@ -229,9 +231,10 @@ recomputed `computed` values, two re-rendered child components. No manual
 2. `selectFilter` — [`FilterTabs.vue:32-34`](../src/components/FilterTabs.vue#L32-L34)
    — emits `change` with that filter value, unchanged.
 
-3. `App.vue` wired `<FilterTabs :active-filter="activeFilter" @change="setFilter" />`
-   — [`App.vue:53`](../src/App.vue#L53) — so `setFilter` runs with the new
-   filter.
+3. `TaskBoardView.vue` wired
+   `<FilterTabs :active-filter="activeFilter" @change="setFilter" />`
+   — [`TaskBoardView.vue:32`](../src/views/TaskBoardView.vue#L32) — so
+   `setFilter` runs with the new filter.
 
 4. `setFilter` — [`useTasks.ts:103-105`](../src/composables/useTasks.ts#L103-L105)
    — sets `activeFilter.value = filter`.
@@ -243,7 +246,8 @@ recomputed `computed` values, two re-rendered child components. No manual
 6. Separately, `activeFilter` (the ref itself, not just the derived list) is
    passed back down as a prop to `FilterTabs` —
    `:active-filter="activeFilter"` at
-   [`App.vue:53`](../src/App.vue#L53) — so `FilterTabs`'s own
+   [`TaskBoardView.vue:32`](../src/views/TaskBoardView.vue#L32) — so
+   `FilterTabs`'s own
    `:class="{ active: option.value === activeFilter }"` —
    [`FilterTabs.vue:56`](../src/components/FilterTabs.vue#L56) — re-evaluates
    for every tab, moving the highlighted-tab style to the one just clicked.
@@ -256,9 +260,11 @@ recomputed `computed` values, two re-rendered child components. No manual
 is the only behavior in this app driven by a lifecycle hook instead of a
 user-initiated event, and it's easy to misread as "just happening."
 
-1. [`src/main.ts`](../src/main.ts) calls `createApp(App).mount('#app')`,
-   which builds `App.vue`'s component tree, including one `TaskForm.vue`
-   instance.
+1. [`src/main.ts`](../src/main.ts) calls `createApp(App).use(router).mount('#app')`,
+   which builds `App.vue`'s shell and asks the router
+   ([`src/router/index.ts`](../src/router/index.ts)) to render whatever view
+   matches the current URL. On first load that is the `/` route,
+   `TaskBoardView.vue`, which in turn creates one `TaskForm.vue` instance.
 
 2. Vue.js creates the real `<input>` element for
    [`TaskForm.vue:69-75`](../src/components/TaskForm.vue#L69-L75) and, because

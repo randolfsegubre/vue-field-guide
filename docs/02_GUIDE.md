@@ -159,10 +159,10 @@ export function useTasks() {
 
 Calling `useTasks()` more than once would create two *separate* independent
 task lists, because each call runs the function body fresh. This app calls
-it exactly **once**, in `App.vue`, which is precisely what makes the state
-shared across every component: they all receive references to the same
-`ref` objects, passed down as props. See
-[`App.vue`, line 18](../src/App.vue#L18).
+it exactly **once**, in `TaskBoardView.vue`, which is precisely what makes
+the state shared across every component on that page: they all receive
+references to the same `ref` objects, passed down as props. See
+[`TaskBoardView.vue`, line 15](../src/views/TaskBoardView.vue#L15).
 
 If you've used React, a composable plays a similar role to a custom Hook.
 If you're coming from an object-oriented background, it's closest to a
@@ -198,23 +198,94 @@ element in the real page — which is exactly why `TaskForm.vue` calls
 setup>`: at that earlier point, the `<input>` does not exist yet, so
 `inputEl.value` would still be `null`.
 
-## Level 8 — Where "hero" starts: what this app deliberately leaves out
+## Level 8 — Vue Router: more than one page
 
-Once the concepts above feel natural, the next layer most real Vue.js
-applications add — and this one intentionally does not, to stay small — is:
+A **Single Page Application** still benefits from feeling like it has
+multiple pages — a URL you can bookmark or share, a browser Back button
+that works, distinct content per section. **Vue Router** provides exactly
+that without ever triggering a real full-page reload:
 
-- **Vue Router** — for apps with more than one page/view (this app has one).
+```ts
+// src/router/index.ts
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    { path: '/', name: 'task-board', component: TaskBoardView },
+    { path: '/about', name: 'about', component: AboutView },
+    { path: '/api-demo', name: 'api-demo', component: ApiDemoView },
+  ],
+})
+```
+
+Two new pieces of markup come with it, both used in
+[`App.vue`](../src/App.vue): `<router-link to="/about">` renders a real
+`<a>` tag but intercepts the click to swap content instead of navigating;
+`<router-view />` is where the matched route's component actually renders.
+Notice `App.vue` itself holds no task data anymore — see
+[docs/03_ANATOMY.md](03_ANATOMY.md) for how state ownership moved down into
+each view once there was more than one of them.
+
+## Level 9 — Calling a real backend: `async`, `await`, and failure states
+
+Every example so far reads and writes a plain in-browser array — an
+operation that always succeeds and finishes instantly. Calling a real
+Application Programming Interface (API) over HTTP is neither: it takes
+time, and it can fail. `src/composables/useApiTasks.ts` is the API-backed
+twin of `useTasks.ts`, built to handle both:
+
+```ts
+async function fetchTasks() {
+  isLoading.value = true
+  error.value = null
+  try {
+    const response = await fetch(`${API_BASE}/api/tasks`)
+    if (!response.ok) throw new Error(`Server responded ${response.status}`)
+    tasks.value = await response.json()
+  } catch (err) {
+    error.value = describeError(err)
+  } finally {
+    isLoading.value = false
+  }
+}
+```
+
+Three things here have no equivalent anywhere in `useTasks.ts`:
+
+- **`async`/`await`** — `fetch()` returns a `Promise` immediately, before a
+  response exists yet; `await` pauses this function (and only this
+  function — the rest of the app keeps running) until that promise
+  resolves.
+- **An explicit loading flag** (`isLoading`) — since the operation now
+  takes a perceptible amount of time, the template needs something to
+  render *while* waiting, not just before-and-after states.
+- **An explicit error flag** (`error`) — since the operation can now fail
+  in ways a local array operation never could (the API isn't running, a
+  Cross-Origin Resource Sharing (CORS) misconfiguration, a bad response).
+
+`ApiDemoView.vue` renders all three states with plain `v-if`/`v-else-if`/
+`v-else` — no new template syntax, just the directives from
+[Level 4](#level-4--directives-how-templates-react-to-data) applied to
+this richer state shape. See
+[docs/05_API_INTEGRATION.md](05_API_INTEGRATION.md) for the complete
+request trace, including how the paired ASP.NET Core Web API in
+`server/VueFieldGuide.Api/` is wired up on the other end.
+
+## Level 10 — Where "hero" starts from here
+
+With routing, composables, and a real API call all in place, the concepts
+most real Vue.js applications add next are:
+
 - **Pinia** — a shared state library, for state that needs to live outside
-  any single component tree, or persist across route changes (this app's
-  composable pattern is the simpler tool that covers small-to-medium apps).
+  any single view's tree, or survive a route change (this app's
+  per-view composable pattern is the simpler tool that covers
+  small-to-medium apps, including this one).
 - **Slots** — a way for a parent to pass *markup*, not just data, into a
   child component (useful for building generic wrapper/layout components).
 - **`watch`/`watchEffect`** — running a side effect in response to a
-  reactive value changing, for cases `computed()` doesn't fit (for example,
-  calling an Application Programming Interface (API) whenever a search box
-  changes).
+  reactive value changing, for cases `computed()` doesn't fit.
 
-Each of those is a natural next step once "props down, events up" and
-reactive state feel like second nature — which is exactly what
-[docs/04_CODE_WALKTHROUGH.md](04_CODE_WALKTHROUGH.md) is meant to cement, by
+Each of those is a natural next step once everything in this guide feels
+like second nature — which is exactly what
+[docs/04_CODE_WALKTHROUGH.md](04_CODE_WALKTHROUGH.md) and
+[docs/05_API_INTEGRATION.md](05_API_INTEGRATION.md) are meant to cement, by
 tracing every one of this app's user interactions through real code.
