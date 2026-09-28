@@ -62,13 +62,13 @@ onMounted(fetchTasks)
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0 0 1.5rem;
 }
 
 .subtitle code {
-  background: #f3f4f6;
+  background: var(--color-surface);
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
 }
@@ -80,22 +80,22 @@ onMounted(fetchTasks)
 }
 
 .status-loading {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .status-error {
-  background: #fef2f2;
-  color: #b91c1c;
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
 .retry-btn {
-  border: 1px solid #b91c1c;
-  background: white;
-  color: #b91c1c;
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
   border-radius: 6px;
   padding: 0.25rem 0.65rem;
   font-size: 0.85rem;
@@ -103,6 +103,6 @@ onMounted(fetchTasks)
 }
 
 .retry-btn:hover {
-  background: #fee2e2;
+  background: var(--color-danger-surface);
 }
 </style>

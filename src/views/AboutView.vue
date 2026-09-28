@@ -128,7 +128,7 @@
 }
 
 .lede {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
@@ -136,24 +136,25 @@
   font-size: 1.05rem;
   margin-top: 1.75rem;
   margin-bottom: 0.5rem;
+  color: var(--color-heading);
 }
 
 .about p,
 .about li {
   font-size: 0.92rem;
   line-height: 1.55;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .about code {
-  background: #f3f4f6;
+  background: var(--color-surface);
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
   font-size: 0.85em;
 }
 
 .about a {
-  color: #6366f1;
+  color: var(--color-accent);
 }
 
 .about ul,

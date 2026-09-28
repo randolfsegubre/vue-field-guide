@@ -52,30 +52,30 @@
   gap: 1.25rem;
   margin-bottom: 1.75rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .brand {
   font-weight: 700;
-  color: #111827;
+  color: var(--color-heading);
   margin-right: 0.5rem;
 }
 
 .nav-link {
-  color: #6b7280;
+  color: var(--color-text-muted);
   text-decoration: none;
   font-size: 0.9rem;
   padding: 0.25rem 0;
 }
 
 .nav-link:hover {
-  color: #111827;
+  color: var(--color-heading);
 }
 
 /* Vue Router's default class for whichever link matches the current route. */
 .nav-link.router-link-active {
-  color: #111827;
+  color: var(--color-heading);
   font-weight: 600;
-  border-bottom: 2px solid #6366f1;
+  border-bottom: 2px solid var(--color-accent-strong);
 }
 </style>

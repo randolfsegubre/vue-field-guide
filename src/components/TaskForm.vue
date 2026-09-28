@@ -87,22 +87,24 @@ onMounted(() => {
 .task-input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border-strong);
   border-radius: 6px;
   font-size: 0.95rem;
+  background: var(--color-surface);
+  color: var(--color-heading);
 }
 
 .task-submit {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
-  background: #10b981;
+  background: var(--color-success);
   color: white;
   font-weight: 600;
   cursor: pointer;
 }
 
 .task-submit:hover {
-  background: #059669;
+  background: var(--color-success-strong);
 }
 </style>

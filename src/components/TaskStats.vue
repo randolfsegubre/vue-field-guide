@@ -47,7 +47,7 @@ defineProps<{
   gap: 1.5rem;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  background: #f9fafb;
+  background: var(--color-surface);
   border-radius: 8px;
 }
 
@@ -60,12 +60,12 @@ defineProps<{
 .stat-value {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-heading);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }

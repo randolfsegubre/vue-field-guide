@@ -41,12 +41,12 @@ const { filteredTasks, stats, activeFilter, addTask, toggleTask, removeTask, set
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0 0 1.5rem;
 }
 
 .subtitle a {
-  color: #6366f1;
+  color: var(--color-accent);
 }
 </style>

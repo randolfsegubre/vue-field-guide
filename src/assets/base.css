@@ -1,54 +1,36 @@
-/* color palette from <https://github.com/vuejs/theme> */
-:root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
-
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
-  --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-}
-
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
 /*
- * This app is deliberately light-mode only: every component under
- * src/ (nav bar, Tutorial page, task board) was written with fixed colors
- * (dark-grey text on a white/light background) rather than the
- * --color-* variables above. The original create-vue scaffold's dark-mode
- * override used to live here and flip --color-background to black while
- * those hardcoded component colors stayed dark-grey — nearly invisible
- * text whenever the OS/browser was in dark mode. `color-scheme: light`
- * also tells the browser to keep native controls (checkboxes, etc.) in
- * their light appearance, matching the rest of the page.
+ * This app is a dark theme, always — not "follows the OS", just dark.
+ * Every component under src/ references the variables below instead of its
+ * own hardcoded colors, so the whole app stays visually consistent from one
+ * file. `color-scheme: dark` also tells the browser to render native form
+ * controls (checkboxes, the text input's default look) in their dark
+ * variant automatically.
  */
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+
+  --color-background: #0f1115; /* page background */
+  --color-surface: #1a1d23; /* cards: stats box, tabs, code chips, inputs */
+  --color-surface-hover: #22262e;
+
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+
+  --color-heading: #f5f6f7; /* headings, primary emphasis */
+  --color-text: #d1d5db; /* body text */
+  --color-text-muted: #9ca3af; /* subtitles, labels, secondary text */
+
+  --color-accent: #818cf8; /* links, active nav/tab state */
+  --color-accent-strong: #6366f1; /* accent borders/underlines */
+
+  --color-danger: #f87171; /* delete button, error text */
+  --color-danger-strong: #ef4444;
+  --color-danger-surface: rgba(239, 68, 68, 0.12); /* error banner background */
+
+  --color-success: #10b981; /* Add button */
+  --color-success-strong: #059669;
+
+  --section-gap: 160px;
 }
 
 *,
@@ -63,9 +45,6 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
   line-height: 1.6;
   font-family:
     Inter,

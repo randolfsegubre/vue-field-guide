@@ -70,17 +70,17 @@ function selectFilter(filter: TaskFilter) {
 
 .tab {
   padding: 0.35rem 0.85rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border-strong);
   border-radius: 999px;
-  background: white;
+  background: var(--color-surface);
   font-size: 0.85rem;
   cursor: pointer;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .tab.active {
-  background: #111827;
-  border-color: #111827;
+  background: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
   color: white;
 }
 </style>

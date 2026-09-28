@@ -56,7 +56,7 @@ const emit = defineEmits<{
 }
 
 .empty-state {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   padding: 1rem 0;
   text-align: center;

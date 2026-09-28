@@ -76,7 +76,7 @@ function handleRemove() {
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 6px;
 }
 
@@ -87,13 +87,13 @@ function handleRemove() {
 
 .task-item.completed .task-text {
   text-decoration: line-through;
-  color: #9ca3af;
+  color: var(--color-text-muted);
 }
 
 .remove-btn {
   border: none;
   background: transparent;
-  color: #ef4444;
+  color: var(--color-danger);
   cursor: pointer;
   font-size: 0.9rem;
   line-height: 1;
@@ -101,6 +101,6 @@ function handleRemove() {
 }
 
 .remove-btn:hover {
-  color: #b91c1c;
+  color: var(--color-danger-strong);
 }
 </style>
