@@ -36,18 +36,19 @@
   --section-gap: 160px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+/*
+ * This app is deliberately light-mode only: every component under
+ * src/ (nav bar, Tutorial page, task board) was written with fixed colors
+ * (dark-grey text on a white/light background) rather than the
+ * --color-* variables above. The original create-vue scaffold's dark-mode
+ * override used to live here and flip --color-background to black while
+ * those hardcoded component colors stayed dark-grey — nearly invisible
+ * text whenever the OS/browser was in dark mode. `color-scheme: light`
+ * also tells the browser to keep native controls (checkboxes, etc.) in
+ * their light appearance, matching the rest of the page.
+ */
+:root {
+  color-scheme: light;
 }
 
 *,
